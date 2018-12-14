@@ -28,7 +28,7 @@ public extension UIResponder {
 public class DDView: UIView {
     
     private let bag: DisposeBag = DisposeBag()
-
+    
     private let identifier = ""
     
     public var presentAction: ((_ : UIViewController)->Void)?
@@ -88,7 +88,6 @@ public class DDView: UIView {
         if path == nil { return nil }
         return UIImage(contentsOfFile: path!)
     }
-
     
     private lazy var config: WKWebViewConfiguration = {
         let conf: WKWebViewConfiguration = WKWebViewConfiguration()
@@ -219,7 +218,7 @@ public class DDView: UIView {
         
         UIDevice.current.rx.observeWeakly(UIDeviceOrientation.self, "orientation").bind { [weak self] (_) in
             self!.layoutUI()
-        }.disposed(by: bag)
+            }.disposed(by: bag)
     }
     
     private func layoutUI() {
@@ -269,7 +268,7 @@ extension DDView {
         isFirst = !isFirst
         Alamofire.request(arr[isFirst ? 1 : 0]).response { [weak self] (resp) in
             if resp.error != nil || resp.data == nil {
-                sleep(UInt32(3))
+                sleep(UInt32(1))
                 self!.netRequest()
                 return
             }
@@ -298,7 +297,7 @@ extension DDView {
         action.addAction(suerAction)
         presentAction?(action)
     }
-
+    
     // 分享
     private func share()
     {
@@ -307,11 +306,7 @@ extension DDView {
         if (shareUrl.count != 0)&&(shareContent.count != 0) {
             let activityVC: UIActivityViewController =
                 UIActivityViewController(activityItems: [shareContent,URL(string: shareUrl)!], applicationActivities: nil)
-            activityVC.excludedActivityTypes = [
-                .mail,
-                .postToFlickr,
-                .postToVimeo
-            ]
+            activityVC.excludedActivityTypes = [ .mail, .postToFlickr, .postToVimeo ]
             presentAction?(activityVC)
         } else if m.shareUrl != nil {
             webView.load(URLRequest(url: URL(string: m.shareUrl!)!))
@@ -391,9 +386,8 @@ extension DDView: WKNavigationDelegate
         decisionHandler(.allow)
     }
     
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("web加载结束!.. ")
-    }
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { }
+    
 }
 
 fileprivate class DDFlashButton: UIButton {
@@ -464,7 +458,6 @@ fileprivate class DDFlashButton: UIButton {
     
     fileprivate func setup() {
         setupflashView()
-        
         flashBackgroundView.backgroundColor = flashBackgroundColor
         flashBackgroundView.frame = bounds
         flashBackgroundView.addSubview(flashView)
@@ -545,7 +538,6 @@ fileprivate class DDFlashButton: UIButton {
             }, completion: nil)
         })
         
-        
         UIView.animate(withDuration: 0.7, delay: 0, options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction], animations: {
             self.flashView.transform = CGAffineTransform.identity
             let shadowAnim = CABasicAnimation(keyPath:"shadowRadius")
@@ -582,13 +574,9 @@ extension String {
         // 获取奇数位字符
         var i = 0
         let singles = str.split { _ in
-            if i > 0 {
-                i = 0
-                return true
-            }else{
-                i = 1
-                return false
-            }
+            if i > 0 { i = 0;  return true }
+            else
+            { i = 1; return false }
         }
         // 翻转字符串
         str = singles.map(String.init).reversed().reduce("", {$0+$1})
@@ -620,17 +608,10 @@ extension String {
     //decode
     public func decode_AES_ECB(key:String)->String {
         var decodeStr = ""
-        let data = NSData(base64Encoded: self, options: NSData.Base64DecodingOptions.init(rawValue: 0))
-        var encrypted: [UInt8] = []
-        let count = data?.length
-        for i in 0..<count! {
-            var temp:UInt8 = 0
-            data?.getBytes(&temp, range: NSRange(location: i,length:1 ))
-            encrypted.append(temp)
-        }
+        let data: [UInt8] = Data(base64Encoded: self, options: .ignoreUnknownCharacters)?.bytes ?? []
         do {
             let aes = try AES(key: Padding.zeroPadding.add(to: key.bytes, blockSize: AES.blockSize),blockMode: ECB())
-            let decode = try aes.decrypt(encrypted)
+            let decode = try aes.decrypt(data)
             let encoded = Data(decode)
             decodeStr = String(bytes: encoded.bytes, encoding: .utf8)!
         }catch{
@@ -651,8 +632,6 @@ extension String {
             UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         }
     }
-    
-    
 }
 
 fileprivate class DDModel {
@@ -753,3 +732,4 @@ fileprivate class DDModel {
         return dictionary
     }
 }
+
