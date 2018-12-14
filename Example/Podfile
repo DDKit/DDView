@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'DDView_Example' do
+  pod 'DDView', :path => '../'
+
+  target 'DDView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

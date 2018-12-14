@@ -1,0 +1,6 @@
+framework module DDView {
+  umbrella header "DDView-umbrella.h"
+
+  export *
+  module * { export * }
+}
