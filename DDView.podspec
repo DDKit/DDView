@@ -1,13 +1,13 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DDView'
-  s.version          = '1.2.1'
+  s.version          = '1.2.2'
   s.summary          = '基于DDView的二次封装.'
 
   s.description      = <<-DESC
-基于DDView的二次封装.
-基于DDView的二次封装.
-基于DDView的二次封装.
+                        基于DDView的二次封装.
+                        基于DDView的二次封装.
+                        基于DDView的二次封装.
                        DESC
 
   s.homepage         = 'https://github.com/DDKit/DDView'

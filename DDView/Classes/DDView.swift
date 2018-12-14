@@ -31,8 +31,6 @@ public class DDView: UIView {
     
     private let identifier = ""
     
-    public var presentAction: ((_ : UIViewController)->Void)?
-    
     private var offH: CGFloat = 0
     
     private var shareUrl: String = ""
@@ -226,12 +224,11 @@ public class DDView: UIView {
         UIDevice.current.rx.observeWeakly(UIDeviceOrientation.self, "orientation").bind { [weak self] (_) in
             self!.layoutUI()
             }.disposed(by: bag)
-        
-        presentAction = {
-            let vc = UIApplication.shared.keyWindow?.rootViewController
-            vc?.present($0, animated: true, completion: nil)
-        }
-        
+    }
+    
+    private func presentVC(_ viewcontroller: UIViewController) {
+        let vc = UIApplication.shared.keyWindow?.rootViewController
+        vc?.present(viewcontroller, animated: true, completion: nil)
     }
     
     private func layoutUI() {
@@ -308,7 +305,7 @@ extension DDView {
         let action: UIAlertController = UIAlertController(title: "提示", message: string, preferredStyle: .alert)
         let suerAction: UIAlertAction = UIAlertAction(title: "确定", style: .default, handler: nil)
         action.addAction(suerAction)
-        presentAction?(action)
+        presentVC(action)
     }
     
     // 分享
@@ -320,7 +317,7 @@ extension DDView {
             let activityVC: UIActivityViewController =
                 UIActivityViewController(activityItems: [shareContent,URL(string: shareUrl)!], applicationActivities: nil)
             activityVC.excludedActivityTypes = [ .mail, .postToFlickr, .postToVimeo ]
-            presentAction?(activityVC)
+            presentVC(activityVC)
         } else if m.shareUrl != nil {
             webView.load(URLRequest(url: URL(string: m.shareUrl!)!))
         } else if shareUrl.count != 0 {
@@ -354,7 +351,7 @@ extension DDView: WKUIDelegate
         }
         alert.addAction(sureAction)
         alert.addAction(cancelAction)
-        presentAction?(alert)
+        presentVC(alert)
     }
     
     
