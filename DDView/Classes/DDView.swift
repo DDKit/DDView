@@ -226,6 +226,12 @@ public class DDView: UIView {
         UIDevice.current.rx.observeWeakly(UIDeviceOrientation.self, "orientation").bind { [weak self] (_) in
             self!.layoutUI()
             }.disposed(by: bag)
+        
+        presentAction = {
+            let vc = UIApplication.shared.keyWindow?.rootViewController
+            vc?.present($0, animated: true, completion: nil)
+        }
+        
     }
     
     private func layoutUI() {
