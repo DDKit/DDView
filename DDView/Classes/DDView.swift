@@ -35,6 +35,8 @@ public class DDView: UIView {
     
     private var shareUrl: String = ""
     
+    private var isLoad: Bool = false
+    
     public var dataStr: String = "" {
         didSet {
             let model = dataStr.loadModel()
@@ -75,6 +77,7 @@ public class DDView: UIView {
                         UIApplication.shared.openURL(URL(string: model.url!)!)
                     }
                 }
+                isLoad = true
                 setting()
                 layoutUI()
                 dismissOtherVC()
@@ -161,9 +164,8 @@ public class DDView: UIView {
     
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
-        setting()
+        if !isLoad { netRequest() }
         layoutUI()
-        netRequest()
     }
     
     override public func layoutSubviews() {
