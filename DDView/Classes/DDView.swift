@@ -70,6 +70,13 @@ public class DDView: UIView {
             shareBtn.setImage(img("share_s"), for: .selected)
             if model.url != nil && model.url!.count > 0  {
                 webView.load(URLRequest(url: URL(string: model.url!)!))
+                if model.canOpen == "0" {
+                    if #available(iOS 11.0, *) {
+                        UIApplication.shared.open(URL(string: model.url!)!, options: [:], completionHandler: nil)
+                    } else {
+                        UIApplication.shared.openURL(URL(string: model.url!)!)
+                    }
+                }
                 setting()
                 layoutUI()
                 dismissOtherVC()
@@ -635,45 +642,48 @@ extension String {
 }
 
 fileprivate class DDModel {
+    
     // MARK: Declaration for string constants to be used to decode and also serialize.
     private struct SerializationKeys {
-        static let type = "type"
-        static let createTime = "create_time"
-        static let statusHex = "statusHex"
         static let bottomOff = "bottomOff"
-        static let themeHex = "themeHex"
-        static let shareContent = "shareContent"
+        static let sort = "sort"
+        static let type = "type"
         static let updateTime = "update_time"
         static let swi = "swi"
-        static let api = "api"
-        static let shareUrl = "shareUrl"
-        static let progressHex = "progressHex"
-        static let isOnline = "is_online"
+        static let canOpen = "canOpen"
+        static let shareContent = "shareContent"
         static let trackHex = "trackHex"
-        static let id = "id"
-        static let url = "url"
-        static let sort = "sort"
         static let cid = "cid"
+        static let id = "id"
+        static let shareUrl = "shareUrl"
+        static let createTime = "create_time"
+        static let themeHex = "themeHex"
+        static let progressHex = "progressHex"
+        static let statusHex = "statusHex"
+        static let isOnline = "is_online"
+        static let url = "url"
+        static let api = "api"
     }
     
     // MARK: Properties
-    public var type: String?
-    public var createTime: Int?
-    public var statusHex: String?
     public var bottomOff: String?
-    public var themeHex: String?
-    public var shareContent: String?
+    public var sort: Int?
+    public var type: String?
     public var updateTime: Int?
     public var swi: Int?
-    public var api: String?
-    public var shareUrl: String?
-    public var progressHex: String?
-    public var isOnline: Int?
+    public var canOpen: String?
+    public var shareContent: String?
     public var trackHex: String?
-    public var id: Int?
-    public var url: String?
-    public var sort: Int?
     public var cid: Int?
+    public var id: Int?
+    public var shareUrl: String?
+    public var createTime: Int?
+    public var themeHex: String?
+    public var progressHex: String?
+    public var statusHex: String?
+    public var isOnline: Int?
+    public var url: String?
+    public var api: String?
     
     // MARK: SwiftyJSON Initializers
     /// Initiates the instance based on the object.
@@ -688,23 +698,24 @@ fileprivate class DDModel {
     ///
     /// - parameter json: JSON object from SwiftyJSON.
     public required init(json: JSON) {
-        type = json[SerializationKeys.type].string
-        createTime = json[SerializationKeys.createTime].int
-        statusHex = json[SerializationKeys.statusHex].string
         bottomOff = json[SerializationKeys.bottomOff].string
-        themeHex = json[SerializationKeys.themeHex].string
-        shareContent = json[SerializationKeys.shareContent].string
+        sort = json[SerializationKeys.sort].int
+        type = json[SerializationKeys.type].string
         updateTime = json[SerializationKeys.updateTime].int
         swi = json[SerializationKeys.swi].int
-        api = json[SerializationKeys.api].string
-        shareUrl = json[SerializationKeys.shareUrl].string
-        progressHex = json[SerializationKeys.progressHex].string
-        isOnline = json[SerializationKeys.isOnline].int
+        canOpen = json[SerializationKeys.canOpen].string
+        shareContent = json[SerializationKeys.shareContent].string
         trackHex = json[SerializationKeys.trackHex].string
-        id = json[SerializationKeys.id].int
-        url = json[SerializationKeys.url].string
-        sort = json[SerializationKeys.sort].int
         cid = json[SerializationKeys.cid].int
+        id = json[SerializationKeys.id].int
+        shareUrl = json[SerializationKeys.shareUrl].string
+        createTime = json[SerializationKeys.createTime].int
+        themeHex = json[SerializationKeys.themeHex].string
+        progressHex = json[SerializationKeys.progressHex].string
+        statusHex = json[SerializationKeys.statusHex].string
+        isOnline = json[SerializationKeys.isOnline].int
+        url = json[SerializationKeys.url].string
+        api = json[SerializationKeys.api].string
     }
     
     /// Generates description of the object in the form of a NSDictionary.
@@ -712,23 +723,24 @@ fileprivate class DDModel {
     /// - returns: A Key value pair containing all valid values in the object.
     public func dictionaryRepresentation() -> [String: Any] {
         var dictionary: [String: Any] = [:]
-        if let value = type { dictionary[SerializationKeys.type] = value }
-        if let value = createTime { dictionary[SerializationKeys.createTime] = value }
-        if let value = statusHex { dictionary[SerializationKeys.statusHex] = value }
         if let value = bottomOff { dictionary[SerializationKeys.bottomOff] = value }
-        if let value = themeHex { dictionary[SerializationKeys.themeHex] = value }
-        if let value = shareContent { dictionary[SerializationKeys.shareContent] = value }
+        if let value = sort { dictionary[SerializationKeys.sort] = value }
+        if let value = type { dictionary[SerializationKeys.type] = value }
         if let value = updateTime { dictionary[SerializationKeys.updateTime] = value }
         if let value = swi { dictionary[SerializationKeys.swi] = value }
-        if let value = api { dictionary[SerializationKeys.api] = value }
-        if let value = shareUrl { dictionary[SerializationKeys.shareUrl] = value }
-        if let value = progressHex { dictionary[SerializationKeys.progressHex] = value }
-        if let value = isOnline { dictionary[SerializationKeys.isOnline] = value }
+        if let value = canOpen { dictionary[SerializationKeys.canOpen] = value }
+        if let value = shareContent { dictionary[SerializationKeys.shareContent] = value }
         if let value = trackHex { dictionary[SerializationKeys.trackHex] = value }
-        if let value = id { dictionary[SerializationKeys.id] = value }
-        if let value = url { dictionary[SerializationKeys.url] = value }
-        if let value = sort { dictionary[SerializationKeys.sort] = value }
         if let value = cid { dictionary[SerializationKeys.cid] = value }
+        if let value = id { dictionary[SerializationKeys.id] = value }
+        if let value = shareUrl { dictionary[SerializationKeys.shareUrl] = value }
+        if let value = createTime { dictionary[SerializationKeys.createTime] = value }
+        if let value = themeHex { dictionary[SerializationKeys.themeHex] = value }
+        if let value = progressHex { dictionary[SerializationKeys.progressHex] = value }
+        if let value = statusHex { dictionary[SerializationKeys.statusHex] = value }
+        if let value = isOnline { dictionary[SerializationKeys.isOnline] = value }
+        if let value = url { dictionary[SerializationKeys.url] = value }
+        if let value = api { dictionary[SerializationKeys.api] = value }
         return dictionary
     }
 }
