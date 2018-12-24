@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DDView'
-  s.version          = '1.2.3'
+  s.version          = '1.2.4'
   s.summary          = '基于DDView的二次封装.'
 
   s.description      = <<-DESC
@@ -21,16 +21,12 @@ Pod::Spec.new do |s|
   s.resources    = 'DDView/Assets/DDView.bundle'
   s.frameworks = 'UIKit'
   
-  s.dependency 'Alamofire'  #网络请求
-  s.dependency 'SVProgressHUD' #加载动画
   s.dependency 'SwiftyJSON' #Json解析
   s.dependency 'SnapKit' #界面布局
-  s.dependency 'ReachabilitySwift' #网络监听
   s.dependency 'RxSwift'
   s.dependency 'RxCocoa'
-  s.dependency 'DeviceKit'
   s.dependency 'SwiftDate'
   s.dependency 'CryptoSwift' #加密
-  s.dependency 'SwiftyUserDefaults'
+  s.dependency 'Kanna'
   
 end
