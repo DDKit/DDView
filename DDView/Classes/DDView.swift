@@ -17,8 +17,14 @@ public var isLandscap: Bool {
     }
 }
 
+public func loadSB<T>() -> T where T : UIViewController {
+    let sb = UIStoryboard(name: "\(T.self)", bundle: nil)
+    let vc = sb.instantiateViewController(withIdentifier: "\(T.self)")
+    object_setClass(vc, T.self)
+    return vc as! T
+}
+
 public class DDView: UIView {
-    
     
     private let bag: DisposeBag = DisposeBag()
     
