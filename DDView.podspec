@@ -1,13 +1,13 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DDView'
-  s.version          = '1.2.4'
-  s.summary          = '基于DDView的二次封装.'
+  s.version          = '1.2.5'
+  s.summary          = '基于UIView的二次封装.'
 
   s.description      = <<-DESC
-                        基于DDView的二次封装.
-                        基于DDView的二次封装.
-                        基于DDView的二次封装.
+                        基于UIView的二次封装.
+                        基于UIView的二次封装.
+                        基于UIView的二次封装.
                        DESC
 
   s.homepage         = 'https://github.com/DDKit/DDView'
@@ -27,6 +27,5 @@ Pod::Spec.new do |s|
   s.dependency 'RxCocoa'
   s.dependency 'SwiftDate'
   s.dependency 'CryptoSwift' #加密
-  s.dependency 'Kanna'
   
 end

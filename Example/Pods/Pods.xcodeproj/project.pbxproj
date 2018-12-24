@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		099963E80E9E65515E8FCDBC36A52D66 /* Pods-DDView_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EC63EBAA2E4089E8BBC602341EF60B59 /* Pods-DDView_Tests-dummy.m */; };
 		284307B321D0CFB4006A91EC /* DDFlashButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284307AF21D0CFB4006A91EC /* DDFlashButton.swift */; };
-		284307B421D0CFB4006A91EC /* DDSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284307B021D0CFB4006A91EC /* DDSettings.swift */; };
 		284307B521D0CFB4006A91EC /* DDString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284307B121D0CFB4006A91EC /* DDString.swift */; };
 		284307B621D0CFB4006A91EC /* DDModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284307B221D0CFB4006A91EC /* DDModel.swift */; };
 		28929F4921C29E0F009078DA /* DDColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28929F4721C29E0F009078DA /* DDColor.swift */; };
@@ -47,7 +46,6 @@
 		17D0C88248023F464EF44FBF1A99CD0D /* DDView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DDView-prefix.pch"; sourceTree = "<group>"; };
 		2078AC988894F9EA173563B87A7E8100 /* Pods-DDView_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DDView_Example.release.xcconfig"; sourceTree = "<group>"; };
 		284307AF21D0CFB4006A91EC /* DDFlashButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DDFlashButton.swift; path = DDView/Classes/DDFlashButton.swift; sourceTree = "<group>"; };
-		284307B021D0CFB4006A91EC /* DDSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DDSettings.swift; path = DDView/Classes/DDSettings.swift; sourceTree = "<group>"; };
 		284307B121D0CFB4006A91EC /* DDString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DDString.swift; path = DDView/Classes/DDString.swift; sourceTree = "<group>"; };
 		284307B221D0CFB4006A91EC /* DDModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DDModel.swift; path = DDView/Classes/DDModel.swift; sourceTree = "<group>"; };
 		28929F4721C29E0F009078DA /* DDColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DDColor.swift; path = DDView/Classes/DDColor.swift; sourceTree = "<group>"; };
@@ -195,7 +193,6 @@
 				28929F4721C29E0F009078DA /* DDColor.swift */,
 				284307AF21D0CFB4006A91EC /* DDFlashButton.swift */,
 				284307B221D0CFB4006A91EC /* DDModel.swift */,
-				284307B021D0CFB4006A91EC /* DDSettings.swift */,
 				284307B121D0CFB4006A91EC /* DDString.swift */,
 				28929F4821C29E0F009078DA /* DDView.swift */,
 				17C2C42283B6123F261437CFEE07B6EA /* Pod */,
@@ -400,7 +397,6 @@
 				284307B521D0CFB4006A91EC /* DDString.swift in Sources */,
 				BB195A5A9EB86FBC00571DC66DA0D79E /* DDView-dummy.m in Sources */,
 				28929F4921C29E0F009078DA /* DDColor.swift in Sources */,
-				284307B421D0CFB4006A91EC /* DDSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
