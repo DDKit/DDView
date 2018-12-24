@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DDView'
-  s.version          = '1.2.5'
+  s.version          = '1.2.6'
   s.summary          = '基于UIView的二次封装.'
 
   s.description      = <<-DESC

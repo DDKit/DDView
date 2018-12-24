@@ -3,7 +3,22 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
+public var isLandscap: Bool {
+    get { return UserDefaults.standard.bool(forKey: "DDView_isLandscape") }
+    set {
+        if newValue {
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+            UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
+        } else {
+            UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        }
+        UserDefaults.standard.set(newValue, forKey: "DDView_isLandscape")
+    }
+}
+
 public class DDView: UIView {
+    
     
     private let bag: DisposeBag = DisposeBag()
     
@@ -269,7 +284,7 @@ extension DDView {
     
     // 切换屏幕
     public func screen(toLandscape: Bool) {
-        DDSetting.isLandscap = toLandscape
+        isLandscap = toLandscape
     }
     
 }
