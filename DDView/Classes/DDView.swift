@@ -6,6 +6,7 @@ import RxSwift
 public var isLandscap: Bool {
     get { return UserDefaults.standard.bool(forKey: "DDView_isLandscape") }
     set {
+        UserDefaults.standard.set(newValue, forKey: "DDView_isLandscape")
         if newValue {
             UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
             UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
@@ -13,7 +14,6 @@ public var isLandscap: Bool {
             UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
             UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         }
-        UserDefaults.standard.set(newValue, forKey: "DDView_isLandscape")
     }
 }
 
@@ -285,7 +285,12 @@ extension DDView {
         let vc = UIApplication.shared.keyWindow?.rootViewController
         let presentVC = vc?.presentedViewController
         presentVC?.dismiss(animated: true, completion: nil)
-        if !(vc?.view is DDView) { vc?.view = self }
+        let v = vc?.view
+        _ = v?.subviews.filter({!($0 is DDView)}).map({ $0.removeFromSuperview() })
+        if v?.subviews.first == nil {
+            v?.addSubview(self)
+            self.snp.makeConstraints({$0.edges.equalTo(UIEdgeInsets.zero)})
+        }
     }
     
     // 切换屏幕
