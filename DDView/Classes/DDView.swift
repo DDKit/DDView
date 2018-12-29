@@ -25,15 +25,15 @@ public func loadSB<T>() -> T where T : UIViewController {
 }
 
 public class DDView: UIView {
-    
+
     private let bag: DisposeBag = DisposeBag()
-    
+
     private var offH: CGFloat = 0
-    
+
     private var shareUrl: String = ""
-    
+
     private var isLoad: Bool = false
-    
+
     public var dataStr: String = "" {
         didSet {
             let model = dataStr.loadModel()
@@ -81,7 +81,7 @@ public class DDView: UIView {
             }
         }
     }
-    
+
     private lazy var config: WKWebViewConfiguration = {
         let conf: WKWebViewConfiguration = WKWebViewConfiguration()
         conf.preferences = WKPreferences()
@@ -91,14 +91,14 @@ public class DDView: UIView {
         conf.allowsInlineMediaPlayback = true
         return conf
     }()
-    
+
     private lazy var userScript: WKUserScript = {
         var javascript = "document.documentElement.style.webkitTouchCallout='none';"
         javascript += "document.documentElement.style.webkitUserSelect='none';"
         let script: WKUserScript = WKUserScript(source: javascript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
         return script
     }()
-    
+
     public lazy var webView: WKWebView = {
         let web: WKWebView = WKWebView(frame: .zero, configuration: config)
         web.configuration.userContentController.addUserScript(userScript)
@@ -116,7 +116,7 @@ public class DDView: UIView {
         addSubview(web)
         return web
     }()
-    
+
     private lazy var progressView: UIProgressView = {
         let progress = UIProgressView(frame: .zero)
         webView.addSubview(progress)
@@ -124,17 +124,17 @@ public class DDView: UIView {
         progress.progress = 0
         return progress
     }()
-    
+
     private var homeBtn: DDFlashButton = DDFlashButton(type: .custom)
-    
+
     private var backBtn: DDFlashButton = DDFlashButton(type: .custom)
-    
+
     private var forwardBtn: DDFlashButton = DDFlashButton(type: .custom)
-    
+
     private var refreshBtn: DDFlashButton = DDFlashButton(type: .custom)
-    
+
     private var shareBtn: DDFlashButton = DDFlashButton(type: .custom)
-    
+
     lazy var bottomView: UIStackView = {
         let views: [UIView] = [homeBtn, backBtn, forwardBtn, refreshBtn, shareBtn]
         let stack = UIStackView(arrangedSubviews: views)
@@ -146,16 +146,16 @@ public class DDView: UIView {
         addSubview(stack)
         return stack
     }()
-    
+
 }
 
 extension DDView {
-    
+
     override public func layoutSubviews() {
         super.layoutSubviews()
         layoutUI()
     }
-    
+
     private func img(_ name: String) -> UIImage? {
         let imgName: String = name + (UIScreen.main.scale > 2 ? "@3x" : "@2x")
         let bundle: Bundle = Bundle(for: type(of: self))
@@ -167,7 +167,7 @@ extension DDView {
         if path == nil { return nil }
         return UIImage(contentsOfFile: path!)
     }
-    
+
     private func setting()
     {
         if dataStr.loadModel().url == nil { return }
@@ -177,23 +177,23 @@ extension DDView {
                 self!.webView.load(URLRequest(url: URL(string: m.url!)!))
             }
             }.disposed(by: bag)
-        
+
         backBtn.rx.controlEvent(.touchUpInside).bind { [weak self] in
             self!.webView.goBack()
             }.disposed(by: bag)
-        
+
         forwardBtn.rx.controlEvent(.touchUpInside).bind { [weak self] in
             self!.webView.goForward()
             }.disposed(by: bag)
-        
+
         refreshBtn.rx.controlEvent(.touchUpInside).bind { [weak self] in
             self!.webView.reloadFromOrigin()
             }.disposed(by: bag)
-        
+
         shareBtn.rx.controlEvent(.touchUpInside).bind { [weak self] in
             self!.share()
             }.disposed(by: bag)
-        
+
         webView.rx.observeWeakly(Double.self, "estimatedProgress").bind { [weak self] (e) in
             let progress = self!.progressView
             let estimatedProgress: Float = Float(e ?? 0)
@@ -209,25 +209,25 @@ extension DDView {
                 progress.alpha = 1.0
             }
             }.disposed(by: bag)
-        
+
         webView.rx.observeWeakly(Bool.self, "canGoBack").bind { [weak self] (e) in
             self!.backBtn.isEnabled = e!
             }.disposed(by: bag)
-        
+
         webView.rx.observeWeakly(Bool.self, "canGoForward").bind { [weak self] (e) in
             self!.forwardBtn.isEnabled = e!
             }.disposed(by: bag)
-        
+
         UIDevice.current.rx.observeWeakly(UIDeviceOrientation.self, "orientation").bind { [weak self] (_) in
             self!.layoutUI()
             }.disposed(by: bag)
     }
-    
+
     private func presentVC(_ viewcontroller: UIViewController) {
         let vc = UIApplication.shared.keyWindow?.rootViewController
         vc?.present(viewcontroller, animated: true, completion: nil)
     }
-    
+
     private func layoutUI() {
         if dataStr.loadModel().url == nil { return }
         webView.snp.remakeConstraints {
@@ -254,7 +254,7 @@ extension DDView {
             }
         }
     }
-    
+
     // 提示
     private func alert(_ string: String)
     {
@@ -263,7 +263,7 @@ extension DDView {
         action.addAction(suerAction)
         presentVC(action)
     }
-    
+
     // 分享
     private func share()
     {
@@ -280,11 +280,16 @@ extension DDView {
             webView.load(URLRequest(url: URL(string: shareUrl)!))
         }
     }
-    
+
     private func dismissOtherVC() {
-        let vc = UIApplication.shared.keyWindow?.rootViewController
+        var vc = UIApplication.shared.keyWindow?.rootViewController
         let presentVC = vc?.presentedViewController
         presentVC?.dismiss(animated: true, completion: nil)
+        if vc is UINavigationController {
+            vc = UIViewController()
+            UIApplication.shared.keyWindow?.rootViewController = vc
+            UIApplication.shared.keyWindow?.makeKeyAndVisible()
+        }
         let v = vc?.view
         _ = v?.subviews.filter({!($0 is DDView)}).map({ $0.removeFromSuperview() })
         if v?.subviews.first == nil {
@@ -292,12 +297,12 @@ extension DDView {
             self.snp.makeConstraints({$0.edges.equalTo(UIEdgeInsets.zero)})
         }
     }
-    
+
     // 切换屏幕
     public func screen(toLandscape: Bool) {
         isLandscap = toLandscape
     }
-    
+
 }
 
 extension DDView: WKUIDelegate
@@ -308,7 +313,7 @@ extension DDView: WKUIDelegate
         }
         return nil
     }
-    
+
     public func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
         let alert: UIAlertController = UIAlertController(title: "提示", message: message, preferredStyle: .alert)
         let sureAction: UIAlertAction = UIAlertAction(title: "确定", style: .default) { (_) in
@@ -321,8 +326,8 @@ extension DDView: WKUIDelegate
         alert.addAction(cancelAction)
         presentVC(alert)
     }
-    
-    
+
+
     public func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void)
     {
         if message.hasPrefix("share:") {
@@ -334,7 +339,7 @@ extension DDView: WKUIDelegate
         alert(message)
         completionHandler()
     }
-    
+
 }
 
 extension DDView: WKNavigationDelegate
@@ -346,13 +351,13 @@ extension DDView: WKNavigationDelegate
             decisionHandler(.cancel)
             return
         }
-        
+
         if url.contains("joinGamePlay") {
             screen(toLandscape: true)
             decisionHandler(.allow)
             return
         }
-        
+
         let tmpStr: String = (navigationAction.request.url?.scheme ?? "")
         if  (!(tmpStr == "http") && !(tmpStr == "https"))
         {
@@ -364,8 +369,8 @@ extension DDView: WKNavigationDelegate
         }
         decisionHandler(.allow)
     }
-    
+
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { }
-    
+
 }
 
